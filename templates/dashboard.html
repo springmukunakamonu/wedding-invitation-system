@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard</h2>
+
+<div class="stats">
+  <div class="stat"><span>{{ stats.total_guests }}</span>Registered Guests</div>
+  <div class="stat"><span>{{ stats.total_invitations }}</span>Invitations Generated</div>
+  <div class="stat"><span>{{ stats.sent }}</span>Invitations Sent</div>
+  <div class="stat"><span>{{ stats.pending }}</span>Pending Delivery</div>
+  <div class="stat"><span>{{ stats.failed }}</span>Failed Deliveries</div>
+  <div class="stat"><span>{{ stats.checked_in_guests }}</span>Guests Checked In</div>
+  <div class="stat"><span>{{ stats.total_people_checked_in }}</span>People Checked In</div>
+  <div class="stat"><span>{{ stats.not_checked_in }}</span>Not Yet Arrived</div>
+</div>
+
+<h3>Attendance by Category</h3>
+<table>
+  <thead>
+    <tr><th>Category</th><th>Total</th><th>Checked In</th></tr>
+  </thead>
+  <tbody>
+    {% for row in by_category %}
+    <tr>
+      <td>{{ row.category }}</td>
+      <td>{{ row.total }}</td>
+      <td>{{ row.checked_in }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

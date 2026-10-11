@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wedding Invitation System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>💍 Wedding Invitation System</h1>
+    <nav>
+      {% if session.get('admin_id') %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('guests.list_guests') }}">Guests</a>
+        <a href="{{ url_for('guests.new_guest') }}">+ New Guest</a>
+        <a href="{{ url_for('checkin.scanner_page') }}">Scanner</a>
+        <a href="{{ url_for('settings.wedding_settings') }}">Settings</a>
+        <a href="{{ url_for('auth.logout') }}">Logout ({{ session.username }})</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

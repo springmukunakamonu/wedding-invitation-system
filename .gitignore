@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Environment variables (SECRETS!)
+.env
+
+# Database (contains real guest data)
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated files (guest PDFs)
+static/uploads/invitations/*
+!static/uploads/invitations/.gitkeep
+static/uploads/backgrounds/*
+!static/uploads/backgrounds/.gitkeep
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log

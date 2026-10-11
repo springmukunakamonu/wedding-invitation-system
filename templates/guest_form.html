@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Edit Guest' if guest else 'Register New Guest' }}</h2>
+
+<form method="post" class="card narrow">
+  <label>Full Name
+    <input name="full_name" required value="{{ guest.full_name if guest else '' }}">
+  </label>
+
+  <label>Phone (with country code, e.g. +260971234567)
+    <input name="phone" required value="{{ guest.phone if guest else '' }}">
+  </label>
+
+  <label>Allowed Persons
+    <input type="number" name="allowed_count" min="1" value="{{ guest.allowed_count if guest else 1 }}">
+  </label>
+
+  <label>Category
+    <select name="category">
+      {% for c in ['Family', 'Friends', 'VIP', 'Colleagues'] %}
+        <option value="{{ c }}" {% if guest and guest.category == c %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <button type="submit">Save</button>
+  <a href="{{ url_for('guests.list_guests') }}" style="margin-left:10px">Cancel</a>
+</form>
+{% endblock %}

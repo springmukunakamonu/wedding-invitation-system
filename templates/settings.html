@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Wedding Settings</h2>
+
+<form method="post" enctype="multipart/form-data" class="card">
+  <label>Bride's Name
+    <input name="bride_name" value="{{ settings.bride_name or '' }}">
+  </label>
+  <label>Groom's Name
+    <input name="groom_name" value="{{ settings.groom_name or '' }}">
+  </label>
+  <label>Wedding Date
+    <input type="date" name="wedding_date" value="{{ settings.wedding_date or '' }}">
+  </label>
+  <label>Ceremony Time
+    <input name="ceremony_time" value="{{ settings.ceremony_time or '' }}">
+  </label>
+  <label>Venue
+    <input name="venue" value="{{ settings.venue or '' }}">
+  </label>
+  <label>Venue Address
+    <input name="venue_address" value="{{ settings.venue_address or '' }}">
+  </label>
+  <label>Reception Details
+    <input name="reception_details" value="{{ settings.reception_details or '' }}">
+  </label>
+  <label>Dress Code
+    <input name="dress_code" value="{{ settings.dress_code or '' }}">
+  </label>
+  <label>Invitation Message
+    <textarea name="invitation_message" rows="3">{{ settings.invitation_message or '' }}</textarea>
+  </label>
+  <label>Contact Phone
+    <input name="contact_phone" value="{{ settings.contact_phone or '' }}">
+  </label>
+  <label>Background Image (optional)
+    <input type="file" name="background_image" accept="image/*">
+  </label>
+  <button type="submit">Save Settings</button>
+</form>
+{% endblock %}

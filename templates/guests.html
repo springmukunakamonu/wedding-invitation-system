@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Guests</h2>
+
+<form method="get" class="search">
+  <input name="q" value="{{ q }}" placeholder="Search by name or phone">
+  <button type="submit">Search</button>
+  <a class="btn" href="{{ url_for('guests.new_guest') }}">+ Add Guest</a>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th><th>Phone</th><th>Category</th><th>Allowed</th>
+      <th>Invitation</th><th>WhatsApp</th><th>Attendance</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for g in guests %}
+    <tr>
+      <td>{{ g.full_name }}</td>
+      <td>{{ g.phone }}</td>
+      <td>{{ g.category }}</td>
+      <td>{{ g.allowed_count }}</td>
+      <td>{% if g.file_path %}✅ Generated{% else %}—{% endif %}</td>
+      <td>{{ g.wa_status or '—' }}</td>
+      <td>{% if g.checked_in %}✅{% else %}—{% endif %}</td>
+      <td class="actions">
+        {% if g.invitation_id %}
+          <a href="{{ url_for('invitations.preview', invitation_id=g.invitation_id) }}" target="_blank">Preview</a>
+          <a href="{{ url_for('invitations.download', invitation_id=g.invitation_id) }}">Download</a>
+        {% endif %}
+        <form method="post" action="{{ url_for('invitations.regenerate', guest_id=g.id) }}" style="display:inline">
+          <button>Regenerate</button>
+        </form>
+        <form method="post" action="{{ url_for('whatsapp.send_to_guest', guest_id=g.id) }}" style="display:inline">
+          <button>Send WhatsApp</button>
+        </form>
+        <a href="{{ url_for('guests.edit_guest', guest_id=g.id) }}">Edit</a>
+        <form method="post" action="{{ url_for('guests.delete_guest', guest_id=g.id) }}" style="display:inline"
+              onsubmit="return confirm('Delete this guest?')">
+          <button class="danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="8">No guests yet. Click "+ Add Guest" to begin.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

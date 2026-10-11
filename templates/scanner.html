@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>QR Scanner — Entrance Check-In</h2>
+
+<div id="reader" style="width:100%;max-width:480px;"></div>
+
+<div id="result" class="card" style="margin-top:16px"></div>
+
+<div id="count-panel" class="card hidden">
+  <p>How many people are arriving? (max <span id="max-count"></span>)</p>
+  <input type="number" id="people-count" min="1" value="1">
+  <button onclick="confirmCheckin()">Confirm Check-In</button>
+</div>
+
+<hr>
+<h3>Manual Search (backup)</h3>
+<input id="manual-search" placeholder="Search by name or phone">
+<button onclick="manualSearch()">Search</button>
+<ul id="manual-results"></ul>
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/scanner.js') }}"></script>
+{% endblock %}
