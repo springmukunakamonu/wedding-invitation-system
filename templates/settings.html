@@ -1,41 +1,114 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Wedding Settings</h2>
+<section class="settings-page">
+  <div class="settings-heading">
+    <span class="form-eyebrow">MAKE IT YOURS</span>
+    <h2>Wedding settings</h2>
+    <p>Set the details that will appear throughout your celebration and on guest invitations.</p>
+  </div>
 
-<form method="post" enctype="multipart/form-data" class="card">
-  <label>Bride's Name
-    <input name="bride_name" value="{{ settings.bride_name or '' }}">
-  </label>
-  <label>Groom's Name
-    <input name="groom_name" value="{{ settings.groom_name or '' }}">
-  </label>
-  <label>Wedding Date
-    <input type="date" name="wedding_date" value="{{ settings.wedding_date or '' }}">
-  </label>
-  <label>Ceremony Time
-    <input name="ceremony_time" value="{{ settings.ceremony_time or '' }}">
-  </label>
-  <label>Venue
-    <input name="venue" value="{{ settings.venue or '' }}">
-  </label>
-  <label>Venue Address
-    <input name="venue_address" value="{{ settings.venue_address or '' }}">
-  </label>
-  <label>Reception Details
-    <input name="reception_details" value="{{ settings.reception_details or '' }}">
-  </label>
-  <label>Dress Code
-    <input name="dress_code" value="{{ settings.dress_code or '' }}">
-  </label>
-  <label>Invitation Message
-    <textarea name="invitation_message" rows="3">{{ settings.invitation_message or '' }}</textarea>
-  </label>
-  <label>Contact Phone
-    <input name="contact_phone" value="{{ settings.contact_phone or '' }}">
-  </label>
-  <label>Background Image (optional)
-    <input type="file" name="background_image" accept="image/*">
-  </label>
-  <button type="submit">Save Settings</button>
-</form>
+  <form method="post" enctype="multipart/form-data" class="settings-form">
+    <section class="settings-card" aria-labelledby="couple-heading">
+      <div class="settings-card-heading">
+        <span class="settings-card-icon" aria-hidden="true">♡</span>
+        <div>
+          <span class="form-eyebrow">THE COUPLE</span>
+          <h3 id="couple-heading">Your names</h3>
+          <p>Make your invitation personal with your names.</p>
+        </div>
+      </div>
+      <div class="settings-fields settings-fields-two">
+        <label class="form-field">
+          <span>Bride's name</span>
+          <input name="bride_name" autocomplete="name" placeholder="Bride's name" value="{{ settings.bride_name or '' }}">
+        </label>
+        <label class="form-field">
+          <span>Groom's name</span>
+          <input name="groom_name" autocomplete="name" placeholder="Groom's name" value="{{ settings.groom_name or '' }}">
+        </label>
+      </div>
+    </section>
+
+    <section class="settings-card" aria-labelledby="event-heading">
+      <div class="settings-card-heading">
+        <span class="settings-card-icon event-icon" aria-hidden="true">✦</span>
+        <div>
+          <span class="form-eyebrow">THE CELEBRATION</span>
+          <h3 id="event-heading">Date &amp; venue</h3>
+          <p>Help guests know where to be and when to arrive.</p>
+        </div>
+      </div>
+      <div class="settings-fields settings-fields-two">
+        <label class="form-field">
+          <span>Wedding date</span>
+          <input type="date" name="wedding_date" value="{{ settings.wedding_date or '' }}">
+        </label>
+        <label class="form-field">
+          <span>Ceremony time</span>
+          <input type="time" name="ceremony_time" value="{{ settings.ceremony_time or '' }}">
+        </label>
+        <label class="form-field">
+          <span>Venue</span>
+          <input name="venue" placeholder="Venue name" value="{{ settings.venue or '' }}">
+        </label>
+        <label class="form-field">
+          <span>Venue address</span>
+          <input name="venue_address" autocomplete="street-address" placeholder="Street, city, and country" value="{{ settings.venue_address or '' }}">
+        </label>
+        <label class="form-field">
+          <span>Reception details</span>
+          <input name="reception_details" placeholder="e.g. Reception follows at 6:00 PM" value="{{ settings.reception_details or '' }}">
+        </label>
+        <label class="form-field">
+          <span>Dress code</span>
+          <input name="dress_code" placeholder="e.g. Formal / Elegant" value="{{ settings.dress_code or '' }}">
+        </label>
+      </div>
+    </section>
+
+    <section class="settings-card" aria-labelledby="invitation-heading">
+      <div class="settings-card-heading">
+        <span class="settings-card-icon message-icon" aria-hidden="true">✉</span>
+        <div>
+          <span class="form-eyebrow">THE INVITATION</span>
+          <h3 id="invitation-heading">Your message</h3>
+          <p>Add a personal welcome and a design touch for your invitations.</p>
+        </div>
+      </div>
+      <div class="settings-fields">
+        <label class="form-field">
+          <span>Invitation message</span>
+          <textarea name="invitation_message" rows="4" placeholder="Write a warm message for your guests">{{ settings.invitation_message or '' }}</textarea>
+        </label>
+        <label class="form-field">
+          <span>Invitation background image <span class="settings-optional">Optional</span></span>
+          <input type="file" name="background_image" accept="image/*">
+          <small>Choose an image to personalize the background of your generated invitations.</small>
+        </label>
+      </div>
+    </section>
+
+    <section class="settings-card" aria-labelledby="contact-heading">
+      <div class="settings-card-heading">
+        <span class="settings-card-icon contact-icon" aria-hidden="true">☎</span>
+        <div>
+          <span class="form-eyebrow">STAY IN TOUCH</span>
+          <h3 id="contact-heading">Contact details</h3>
+          <p>Give guests a number to reach out with questions.</p>
+        </div>
+      </div>
+      <div class="settings-fields">
+        <label class="form-field">
+          <span>Contact phone</span>
+          <input type="tel" name="contact_phone" autocomplete="tel" placeholder="+260 971 234 567" value="{{ settings.contact_phone or '' }}">
+        </label>
+      </div>
+    </section>
+
+    <div class="settings-actions">
+      <p>Your updates will be used on newly generated invitations.</p>
+      <button type="submit" class="form-submit">Save wedding settings <span aria-hidden="true">→</span></button>
+    </div>
+  </form>
+</section>
 {% endblock %}

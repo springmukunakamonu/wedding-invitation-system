@@ -1,29 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ 'Edit Guest' if guest else 'Register New Guest' }}</h2>
+<section class="form-page guest-form-page">
+  <div class="form-page-heading">
+    <a class="form-back-link" href="{{ url_for('guests.list_guests') }}">← Back to guest list</a>
+    <span class="form-eyebrow">YOUR CELEBRATION, YOUR PEOPLE</span>
+    <h2>{{ 'Edit guest details' if guest else 'Welcome someone special' }}</h2>
+    <p>{{ 'Update this guest’s information below.' if guest else 'Add a guest and prepare a personal invitation for them.' }}</p>
+  </div>
 
-<form method="post" class="card narrow">
-  <label>Full Name
-    <input name="full_name" required value="{{ guest.full_name if guest else '' }}">
-  </label>
+  <form method="post" class="form-card guest-form-card">
+    <div class="form-card-heading">
+      <span class="form-card-icon" aria-hidden="true">♡</span>
+      <div>
+        <h3>Guest details</h3>
+        <p>Enter their contact details and invitation preferences.</p>
+      </div>
+    </div>
 
-  <label>Phone (with country code, e.g. +260971234567)
-    <input name="phone" required value="{{ guest.phone if guest else '' }}">
-  </label>
+    <div class="guest-form-grid">
+      <label class="form-field">
+        <span>Full name</span>
+        <input name="full_name" required autocomplete="name" placeholder="e.g. Jordan Smith"
+               value="{{ guest.full_name if guest else '' }}">
+      </label>
 
-  <label>Allowed Persons
-    <input type="number" name="allowed_count" min="1" value="{{ guest.allowed_count if guest else 1 }}">
-  </label>
+      <label class="form-field">
+        <span>Phone number</span>
+        <input type="tel" name="phone" required autocomplete="tel" placeholder="+260 971 234 567"
+               value="{{ guest.phone if guest else '' }}">
+        <small>Include the country code so the invitation can be shared.</small>
+      </label>
 
-  <label>Category
-    <select name="category">
-      {% for c in ['Family', 'Friends', 'VIP', 'Colleagues'] %}
-        <option value="{{ c }}" {% if guest and guest.category == c %}selected{% endif %}>{{ c }}</option>
-      {% endfor %}
-    </select>
-  </label>
+      <label class="form-field">
+        <span>Allowed persons</span>
+        <input type="number" name="allowed_count" min="1" value="{{ guest.allowed_count if guest else 1 }}">
+        <small>Maximum number of people admitted on this invitation.</small>
+      </label>
 
-  <button type="submit">Save</button>
-  <a href="{{ url_for('guests.list_guests') }}" style="margin-left:10px">Cancel</a>
-</form>
+      <label class="form-field">
+        <span>Guest category</span>
+        <select name="category">
+          {% for c in ['Family', 'Friends', 'VIP', 'Colleagues'] %}
+            <option value="{{ c }}" {% if guest and guest.category == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button class="form-submit" type="submit">{{ 'Save changes' if guest else 'Add guest' }}</button>
+      <a class="form-cancel" href="{{ url_for('guests.list_guests') }}">Cancel</a>
+    </div>
+  </form>
+</section>
 {% endblock %}

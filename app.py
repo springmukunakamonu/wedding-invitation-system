@@ -87,4 +87,4 @@ def dashboard():
 if __name__ == "__main__":
     init_db()
     create_admin("admin", "admin123")   # Change in production!
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)

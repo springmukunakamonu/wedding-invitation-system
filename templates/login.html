@@ -1,15 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card narrow">
-  <h2>Admin Login</h2>
-  <form method="post">
-    <label>Username
-      <input name="username" required autofocus>
-    </label>
-    <label>Password
-      <input type="password" name="password" required>
-    </label>
-    <button type="submit">Sign in</button>
-  </form>
-</div>
+<section class="login-page">
+  <div class="login-card">
+    <div class="login-welcome">
+      <span class="login-flower" aria-hidden="true">✳</span>
+      <span class="form-eyebrow">A DAY TO REMEMBER</span>
+      <h2>Every detail,<br>beautifully in place.</h2>
+      <p>Manage your guests, invitations, and wedding-day arrivals from one lovely place.</p>
+      <span class="login-welcome-footer">Made for your celebration <span aria-hidden="true">♡</span></span>
+    </div>
+
+    <div class="login-content">
+      <span class="login-mark" aria-hidden="true">♡</span>
+      <span class="form-eyebrow">WELCOME BACK</span>
+      <h3>Admin sign in</h3>
+      <p class="login-description">Sign in to continue managing your celebration.</p>
+
+      <form method="post" class="login-form">
+        <label class="form-field">
+          <span>Username</span>
+          <input name="username" required autofocus autocomplete="username" placeholder="Enter your username">
+        </label>
+        <label class="form-field">
+          <span>Password</span>
+          <input type="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
+        </label>
+        <button type="submit" class="form-submit login-submit">Enter <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="login-secure-note"><span aria-hidden="true">▣</span> Secure access for your wedding team</p>
+    </div>
+  </div>
+</section>
 {% endblock %}

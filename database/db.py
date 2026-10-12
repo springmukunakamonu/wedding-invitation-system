@@ -5,9 +5,12 @@ from config import Config
 
 def get_db():
     os.makedirs(os.path.dirname(Config.DATABASE), exist_ok=True)
-    conn = sqlite3.connect(Config.DATABASE)
+    conn = sqlite3.connect(Config.DATABASE, timeout=30)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA journal_mode = WAL")
+    conn.execute("PRAGMA synchronous = NORMAL")
+    conn.execute("PRAGMA busy_timeout = 30000")
     return conn
 
 
@@ -41,16 +44,49 @@ def init_db():
 
 def query(sql, args=(), one=False):
     conn = get_db()
-    cur = conn.execute(sql, args)
-    rows = cur.fetchall()
-    conn.close()
-    return (rows[0] if rows else None) if one else rows
+    try:
+        cur = conn.execute(sql, args)
+        rows = cur.fetchall()
+        return (rows[0] if rows else None) if one else rows
+    finally:
+        conn.close()
 
 
 def execute(sql, args=()):
     conn = get_db()
-    cur = conn.execute(sql, args)
-    conn.commit()
-    last_id = cur.lastrowid
-    conn.close()
-    return last_id
+    try:
+        cur = conn.execute(sql, args)
+        conn.commit()
+        last_id = cur.lastrowid
+        return last_id
+    except sqlite3.OperationalError:
+        # If somehow the write still fails, roll back cleanly
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+
+def delete_guest(guest_id):
+    conn = get_db()
+    try:
+        conn.execute("BEGIN")
+        conn.execute("""
+            DELETE FROM checkins
+            WHERE guest_id = ?
+               OR invitation_id IN (SELECT id FROM invitations WHERE guest_id = ?)
+        """, (guest_id, guest_id))
+        conn.execute("""
+            DELETE FROM whatsapp_logs
+            WHERE guest_id = ?
+               OR invitation_id IN (SELECT id FROM invitations WHERE guest_id = ?)
+        """, (guest_id, guest_id))
+        conn.execute("DELETE FROM invitations WHERE guest_id = ?", (guest_id,))
+        cur = conn.execute("DELETE FROM guests WHERE id = ?", (guest_id,))
+        conn.commit()
+        return cur.rowcount > 0
+    except sqlite3.Error:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()

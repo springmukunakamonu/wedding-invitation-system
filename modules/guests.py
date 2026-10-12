@@ -1,6 +1,6 @@
 import uuid
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
-from database.db import query, execute
+from database.db import query, execute, delete_guest as delete_guest_record
 from modules.auth import login_required
 from modules.invitations import generate_invitation_for_guest
 
@@ -116,8 +116,10 @@ def edit_guest(guest_id):
 @guests_bp.route("/guests/<int:guest_id>/delete", methods=["POST"])
 @login_required
 def delete_guest(guest_id):
-    execute("DELETE FROM guests WHERE id = ?", (guest_id,))
-    flash("Guest deleted.", "success")
+    if delete_guest_record(guest_id):
+        flash("Guest deleted.", "success")
+    else:
+        flash("Guest not found.", "error")
     return redirect(url_for("guests.list_guests"))
 
 

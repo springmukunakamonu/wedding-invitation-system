@@ -1,22 +1,65 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>QR Scanner — Entrance Check-In</h2>
+<section class="checkin-page">
+  <div class="checkin-heading">
+    <span class="form-eyebrow">WEDDING DAY</span>
+    <h2>Guest check-in</h2>
+    <p>Scan a guest’s invitation QR code or find them by name or phone number.</p>
+  </div>
 
-<div id="reader" style="width:100%;max-width:480px;"></div>
+  <div class="checkin-grid">
+    <section class="checkin-card scanner-card" aria-labelledby="camera-heading">
+      <div class="checkin-card-heading">
+        <span class="checkin-card-icon" aria-hidden="true">▦</span>
+        <div>
+          <h3 id="camera-heading">Scan invitation</h3>
+          <p>For best results, use the rear camera on your phone.</p>
+        </div>
+      </div>
 
-<div id="result" class="card" style="margin-top:16px"></div>
+      <div id="camera-notice" class="camera-notice hidden" role="status"></div>
+      <div class="scanner-controls">
+        <button id="start-camera" type="button" class="form-submit">Start camera</button>
+        <button id="stop-camera" type="button" class="camera-stop-button hidden">Stop camera</button>
+      </div>
+      <div id="reader" aria-label="Camera QR code scanner"></div>
+      <p id="scanner-status" class="scanner-status" role="status" aria-live="polite">Camera is off.</p>
+    </section>
 
-<div id="count-panel" class="card hidden">
-  <p>How many people are arriving? (max <span id="max-count"></span>)</p>
-  <input type="number" id="people-count" min="1" value="1">
-  <button onclick="confirmCheckin()">Confirm Check-In</button>
-</div>
+    <section class="checkin-card manual-card" aria-labelledby="manual-heading">
+      <div class="checkin-card-heading">
+        <span class="checkin-card-icon manual-icon" aria-hidden="true">⌕</span>
+        <div>
+          <h3 id="manual-heading">Find a guest</h3>
+          <p>Use this if the guest can’t show their QR code.</p>
+        </div>
+      </div>
+      <form id="manual-search-form" class="manual-search-form">
+        <label class="form-field" for="manual-search">
+          <span>Name or phone number</span>
+          <input id="manual-search" name="q" placeholder="Search your guest list" autocomplete="off">
+        </label>
+        <button type="submit" class="form-submit">Search guests</button>
+      </form>
+      <ul id="manual-results" class="manual-results" aria-live="polite"></ul>
+    </section>
+  </div>
 
-<hr>
-<h3>Manual Search (backup)</h3>
-<input id="manual-search" placeholder="Search by name or phone">
-<button onclick="manualSearch()">Search</button>
-<ul id="manual-results"></ul>
+  <div id="result" class="checkin-result hidden" role="status" aria-live="polite"></div>
+
+  <section id="count-panel" class="checkin-count-card hidden" aria-labelledby="count-heading">
+    <div>
+      <span class="form-eyebrow">CONFIRM ARRIVAL</span>
+      <h3 id="count-heading">How many people are arriving?</h3>
+      <p>Maximum allowed: <strong id="max-count"></strong></p>
+    </div>
+    <label class="form-field count-field" for="people-count">
+      <span>People arriving</span>
+      <input type="number" id="people-count" min="1" value="1" inputmode="numeric">
+    </label>
+    <button id="confirm-checkin" type="button" class="form-submit">Confirm check-in</button>
+  </section>
+</section>
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/scanner.js') }}"></script>

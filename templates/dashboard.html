@@ -1,31 +1,102 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Dashboard</h2>
+<section class="dashboard">
+  <div class="dashboard-hero">
+    <div>
+      <span class="dashboard-eyebrow">YOUR CELEBRATION, AT A GLANCE</span>
+      <h2>Wedding dashboard</h2>
+      <p>Keep your guest list, invitations, and arrival updates all in one place.</p>
+    </div>
+    <div class="dashboard-hero-actions">
+      <a class="dashboard-button dashboard-button-primary" href="{{ url_for('guests.new_guest') }}">＋ Add a guest</a>
+      <a class="dashboard-button dashboard-button-secondary" href="{{ url_for('checkin.scanner_page') }}">Open check-in</a>
+    </div>
+    <span class="dashboard-sparkle" aria-hidden="true">✳</span>
+  </div>
 
-<div class="stats">
-  <div class="stat"><span>{{ stats.total_guests }}</span>Registered Guests</div>
-  <div class="stat"><span>{{ stats.total_invitations }}</span>Invitations Generated</div>
-  <div class="stat"><span>{{ stats.sent }}</span>Invitations Sent</div>
-  <div class="stat"><span>{{ stats.pending }}</span>Pending Delivery</div>
-  <div class="stat"><span>{{ stats.failed }}</span>Failed Deliveries</div>
-  <div class="stat"><span>{{ stats.checked_in_guests }}</span>Guests Checked In</div>
-  <div class="stat"><span>{{ stats.total_people_checked_in }}</span>People Checked In</div>
-  <div class="stat"><span>{{ stats.not_checked_in }}</span>Not Yet Arrived</div>
-</div>
+  <section class="dashboard-section" aria-labelledby="overview-heading">
+    <div class="dashboard-section-heading">
+      <div>
+        <span class="dashboard-eyebrow">THE BIG PICTURE</span>
+        <h3 id="overview-heading">Guest &amp; invitation overview</h3>
+      </div>
+      <a class="dashboard-text-link" href="{{ url_for('guests.list_guests') }}">View guest list <span aria-hidden="true">→</span></a>
+    </div>
 
-<h3>Attendance by Category</h3>
-<table>
-  <thead>
-    <tr><th>Category</th><th>Total</th><th>Checked In</th></tr>
-  </thead>
-  <tbody>
-    {% for row in by_category %}
-    <tr>
-      <td>{{ row.category }}</td>
-      <td>{{ row.total }}</td>
-      <td>{{ row.checked_in }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <div class="dashboard-stats">
+      <article class="dashboard-stat">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-guest" aria-hidden="true">♡</span><span class="dashboard-stat-label">GUESTS</span></div>
+        <strong>{{ stats.total_guests }}</strong>
+        <span class="dashboard-stat-caption">Registered guests</span>
+      </article>
+      <article class="dashboard-stat">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-invitation" aria-hidden="true">✉</span><span class="dashboard-stat-label">INVITATIONS</span></div>
+        <strong>{{ stats.total_invitations }}</strong>
+        <span class="dashboard-stat-caption">Invitations generated</span>
+      </article>
+      <article class="dashboard-stat">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-sent" aria-hidden="true">✓</span><span class="dashboard-stat-label">DELIVERED</span></div>
+        <strong>{{ stats.sent }}</strong>
+        <span class="dashboard-stat-caption">Invitations sent</span>
+      </article>
+      <article class="dashboard-stat">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-pending" aria-hidden="true">◷</span><span class="dashboard-stat-label">PENDING</span></div>
+        <strong>{{ stats.pending }}</strong>
+        <span class="dashboard-stat-caption">Awaiting delivery</span>
+      </article>
+      <article class="dashboard-stat dashboard-stat-alert">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-failed" aria-hidden="true">!</span><span class="dashboard-stat-label">NEEDS ATTENTION</span></div>
+        <strong>{{ stats.failed }}</strong>
+        <span class="dashboard-stat-caption">Failed deliveries</span>
+      </article>
+      <article class="dashboard-stat">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-arrived" aria-hidden="true">✦</span><span class="dashboard-stat-label">ARRIVED</span></div>
+        <strong>{{ stats.checked_in_guests }}</strong>
+        <span class="dashboard-stat-caption">Guests checked in</span>
+      </article>
+      <article class="dashboard-stat">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-people" aria-hidden="true">♧</span><span class="dashboard-stat-label">ATTENDEES</span></div>
+        <strong>{{ stats.total_people_checked_in }}</strong>
+        <span class="dashboard-stat-caption">People checked in</span>
+      </article>
+      <article class="dashboard-stat">
+        <div class="dashboard-stat-top"><span class="dashboard-stat-icon icon-away" aria-hidden="true">⌖</span><span class="dashboard-stat-label">ON THE WAY</span></div>
+        <strong>{{ stats.not_checked_in }}</strong>
+        <span class="dashboard-stat-caption">Not yet arrived</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="dashboard-section dashboard-attendance" aria-labelledby="attendance-heading">
+    <div class="dashboard-section-heading">
+      <div>
+        <span class="dashboard-eyebrow">ARRIVAL TRACKER</span>
+        <h3 id="attendance-heading">Attendance by category</h3>
+      </div>
+      <a class="dashboard-text-link" href="{{ url_for('checkin.scanner_page') }}">Go to check-in <span aria-hidden="true">→</span></a>
+    </div>
+
+    {% if by_category %}
+    <div class="category-list">
+      {% for row in by_category %}
+      {% set attendance_percent = (row.checked_in / row.total * 100)|round|int if row.total else 0 %}
+      <article class="category-row">
+        <div class="category-name">{{ row.category }}</div>
+        <div class="category-progress" role="progressbar" aria-label="{{ row.category }} attendance" aria-valuenow="{{ attendance_percent }}" aria-valuemin="0" aria-valuemax="100">
+          <span class="category-progress-fill" data-progress="{{ attendance_percent }}" aria-hidden="true"></span>
+        </div>
+        <div class="category-count"><strong>{{ row.checked_in }}</strong><span>of {{ row.total }} checked in</span></div>
+        <div class="category-percent">{{ attendance_percent }}%</div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="dashboard-empty">
+      <span aria-hidden="true">♡</span>
+      <p>Your guest categories will appear here once you add guests.</p>
+      <a class="dashboard-text-link" href="{{ url_for('guests.new_guest') }}">Add your first guest <span aria-hidden="true">→</span></a>
+    </div>
+    {% endif %}
+  </section>
+</section>
 {% endblock %}
