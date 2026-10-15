@@ -50,9 +50,6 @@ A web application for managing wedding guests, generating personalized PDF invit
 
 Open the app's `/scanner` page on the phone that will be used at the entrance and sign in. The phone and computer must be able to reach the same app and database. For QR scanning, open the page over HTTPS and allow camera access when the browser prompts; mobile browsers block camera access on ordinary HTTP network addresses. If the site is only running on a computer on your Wi-Fi, publish it through a trusted HTTPS host or HTTPS reverse proxy before opening it on the phone. The guest search and manual check-in remain available if camera access is unavailable.
 
-## Security
-
-Never upload your `.env` file, private credentials, or live wedding guest database to GitHub.
 
 ## Project Status
 
